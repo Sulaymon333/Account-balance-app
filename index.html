@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+  <main>
+    <div class='main-container'>
+      <h1>Account Balance App</h1>
+      <form action="" id=form>
+        <input type="text" autocomplete placeholder="Enter description" id="description" name="description" autofocus>
+        <input type="number" autocomplete onkeydown="return event.keyCode !==69" placeholder="Enter amount" id="amount"
+          name="amount" autofocus>
+        <select name="select" id="select">
+          <option value="income">Income</option>
+          <option value="income">Expense</option>
+        </select>
+        <button class="add-button">Add</button>
+      </form>
+      <p class="error-message"></p>
+      <div class="transaction-info">
+        <div class="flex income">
+          <h3 class="title">Income</h3>
+          <ul class="income-items"></ul>
+        </div>
+        <div class="flex expense">
+          <h3 class="title">Expense</h3>
+          <ul class="expense-items"></ul>
+        </div>
+      </div>
+
+      <div class="balance">
+        <h3 class="title">Balance</h3>
+        <p class="result-text">This account is for <span class="owner-name">Sulaymon Tajudeen</span>. Account Balance:
+          1990 €
+          <span class="owner-balance"></span></p>
+      </div>
+    </div>
+  </main>
+
+
+  <script src="./script/app.js"></script>
+</body>
+
+</html>
