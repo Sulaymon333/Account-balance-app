@@ -9,10 +9,11 @@ let selectElement = document.querySelector('#select');
 form.addEventListener('submit', function (e) {
   if (descriptionInput.value && amountInput.value && selectElement.selectedIndex == '0') {
     addToList(descriptionInput.value, amountInput.value, incomeItems, displayTime());
+    setLocalStorage('income')
   } else if (descriptionInput.value && amountInput.value && selectElement.selectedIndex == '1') {
     addToList(descriptionInput.value, amountInput.value, expenseItems, displayTime());
+    setLocalStorage('expense')
   } else {
-    // show error function
     function showError(color, textContent) {
       const error = document.querySelector('.error-message');
       error.textContent = textContent;
@@ -62,3 +63,37 @@ const displayTime = () => {
 
 }
 
+// set to Local storage
+function setLocalStorage(id) {
+  let item = {
+    id: id,
+    description: descriptionInput.value,
+    amount: amountInput.value,
+    time: displayTime()
+  }
+
+  let items;
+  if (localStorage.getItem('items') === null) {
+    items = []
+  } else {
+    items = JSON.parse(localStorage.getItem('items'))
+  }
+
+  items.push(item);
+  localStorage.setItem('items', JSON.stringify(items));
+}
+
+// get data from local storage
+document.addEventListener('DOMContentLoaded', getLocalStorage);
+
+function getLocalStorage() {
+  const getStoredItems = JSON.parse(localStorage.getItem('items'));
+  getStoredItems.forEach(item => {
+    const { id, description, amount, time } = item;
+    if (id === 'income') {
+      addToList(description, amount, incomeItems, time);
+    } else if (id === 'expense') {
+      addToList(description, amount, expenseItems, time);
+    }
+  });
+}

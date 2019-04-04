@@ -8,7 +8,7 @@ You can see the live demo of the App here:
 
 [(https://github.com/Sulaymon333/Account-balance-app)](https://github.com/Sulaymon333/Account-balance-app)
 
-# <p align="center"><img src="assets/demo.png"/></p>
+# <p align="center"><img src="assets/demo.PNG"/></p>
 
 ## Author
 
