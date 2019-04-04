@@ -5,14 +5,15 @@ let amountInput = document.getElementById('amount');
 let incomeItems = document.querySelector('.income-items');
 let expenseItems = document.querySelector('.expense-items');
 let selectElement = document.querySelector('#select');
+let ownerBalance = document.querySelector('.owner-balance');
 
 form.addEventListener('submit', function (e) {
   if (descriptionInput.value && amountInput.value && selectElement.selectedIndex == '0') {
     addToList(descriptionInput.value, amountInput.value, incomeItems, displayTime());
-    setLocalStorage('income')
+    setLocalStorage('income');
   } else if (descriptionInput.value && amountInput.value && selectElement.selectedIndex == '1') {
     addToList(descriptionInput.value, amountInput.value, expenseItems, displayTime());
-    setLocalStorage('expense')
+    setLocalStorage('expense');
   } else {
     function showError(color, textContent) {
       const error = document.querySelector('.error-message');
@@ -30,6 +31,9 @@ form.addEventListener('submit', function (e) {
     }, 2500)
   }
 
+  balance() <= 0 ? ownerBalance.style.color = 'red' : ownerBalance.style.color = 'green';
+  ownerBalance.textContent = `${balance()} €`;
+
   descriptionInput.value = '';
   amountInput.value = '';
 
@@ -37,7 +41,7 @@ form.addEventListener('submit', function (e) {
 });
 
 function addToList(descriptionValue, amountValue, listType, time) {
-  let listItem = `<li><span id="description-info">${descriptionValue}</span><span id="amount-info">${amountValue} €</span><span>${time}</span></li>`;
+  let listItem = `<li><span id="description-info">${descriptionValue}</span><span id="amount-info">${amountValue.toLocaleString()} €</span><span>${time}</span></li>`;
   listType.insertAdjacentHTML('beforeend', listItem);
 }
 
@@ -83,7 +87,7 @@ function setLocalStorage(id) {
   localStorage.setItem('items', JSON.stringify(items));
 }
 
-// get data from local storage
+// get data - array of objects stored in local storage when document loads
 document.addEventListener('DOMContentLoaded', getLocalStorage);
 
 function getLocalStorage() {
@@ -91,9 +95,25 @@ function getLocalStorage() {
   getStoredItems.forEach(item => {
     const { id, description, amount, time } = item;
     if (id === 'income') {
-      addToList(description, amount, incomeItems, time);
+      addToList(description, amount.toLocaleString(), incomeItems, time);
     } else if (id === 'expense') {
       addToList(description, amount, expenseItems, time);
     }
   });
+
+  balance() <= 0 ? ownerBalance.style.color = 'red' : ownerBalance.style.color = 'green';
+  ownerBalance.textContent = `${balance()} €`
 }
+
+function balance() {
+  const getStoredItems = JSON.parse(localStorage.getItem('items'));
+  const totalIncome = getStoredItems.filter(item => item.id === 'income').map(item => item.amount).reduce((total, item) => total + Number(item), 0);
+
+  const totalExpense = getStoredItems.filter(item => item.id === 'expense').map(item => item.amount).reduce((total, item) => total + Number(item), 0);
+
+  const balance = totalIncome - totalExpense
+  return balance;
+}
+
+
+

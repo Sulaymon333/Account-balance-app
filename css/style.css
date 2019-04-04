@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 body{
+  font-family: 'Gloria Hallelujah', cursive;
   text-align: center;
   background-color: lightblue;
   font-size: 16px;
@@ -91,4 +92,9 @@ span{
 .balance {
   margin-top: 30px;
   border: 1px solid grey;
+}
+
+.owner-balance {
+  font-weight: 700;
+  font-size: 20px;
 }
