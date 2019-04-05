@@ -75,7 +75,10 @@ function setLocalStorage(id) {
     amount: amountInput.value,
     time: displayTime()
   }
+  localStorageChecker(item)
+}
 
+function localStorageChecker(item) {
   let items;
   if (localStorage.getItem('items') === null) {
     items = []
@@ -92,14 +95,20 @@ document.addEventListener('DOMContentLoaded', getLocalStorage);
 
 function getLocalStorage() {
   const getStoredItems = JSON.parse(localStorage.getItem('items'));
-  getStoredItems.forEach(item => {
-    const { id, description, amount, time } = item;
-    if (id === 'income') {
-      addToList(description, amount.toLocaleString(), incomeItems, time);
-    } else if (id === 'expense') {
-      addToList(description, amount, expenseItems, time);
-    }
-  });
+  let items;
+  if (getStoredItems === null) {
+    items = []
+    localStorage.setItem('items', JSON.stringify(items))
+  } else {
+    getStoredItems.forEach(item => {
+      const { id, description, amount, time } = item;
+      if (id === 'income') {
+        addToList(description, amount.toLocaleString(), incomeItems, time);
+      } else if (id === 'expense') {
+        addToList(description, amount, expenseItems, time);
+      }
+    })
+  };
 
   balance() <= 0 ? ownerBalance.style.color = 'red' : ownerBalance.style.color = 'green';
   ownerBalance.textContent = `${balance()} €`
@@ -114,6 +123,5 @@ function balance() {
   const balance = totalIncome - totalExpense
   return balance;
 }
-
 
 
