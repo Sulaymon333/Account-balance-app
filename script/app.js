@@ -9,10 +9,10 @@ let ownerBalance = document.querySelector('.owner-balance');
 
 form.addEventListener('submit', function (e) {
   if (descriptionInput.value && amountInput.value && selectElement.selectedIndex == '0') {
-    addToList(descriptionInput.value, amountInput.value, incomeItems, displayTime());
+    addToList(descriptionInput.value, Number(amountInput.value).toLocaleString(), incomeItems, displayTime());
     setLocalStorage('income');
   } else if (descriptionInput.value && amountInput.value && selectElement.selectedIndex == '1') {
-    addToList(descriptionInput.value, amountInput.value, expenseItems, displayTime());
+    addToList(descriptionInput.value, Number(amountInput.value).toLocaleString(), expenseItems, displayTime());
     setLocalStorage('expense');
   } else {
     function showError(color, textContent) {
@@ -75,10 +75,7 @@ function setLocalStorage(id) {
     amount: amountInput.value,
     time: displayTime()
   }
-  localStorageChecker(item)
-}
 
-function localStorageChecker(item) {
   let items;
   if (localStorage.getItem('items') === null) {
     items = []
@@ -103,9 +100,9 @@ function getLocalStorage() {
     getStoredItems.forEach(item => {
       const { id, description, amount, time } = item;
       if (id === 'income') {
-        addToList(description, amount.toLocaleString(), incomeItems, time);
+        addToList(description, Number(amount).toLocaleString(), incomeItems, time);
       } else if (id === 'expense') {
-        addToList(description, amount, expenseItems, time);
+        addToList(description, Number(amount).toLocaleString(), expenseItems, time);
       }
     })
   };
@@ -116,12 +113,27 @@ function getLocalStorage() {
 
 function balance() {
   const getStoredItems = JSON.parse(localStorage.getItem('items'));
-  const totalIncome = getStoredItems.filter(item => item.id === 'income').map(item => item.amount).reduce((total, item) => total + Number(item), 0);
+  let items;
+  if (getStoredItems === null) {
+    items = []
+    localStorage.setItem('items', JSON.stringify(items))
+  } else {
+    const totalIncome = getStoredItems.filter(item => item.id === 'income').map(item => item.amount).reduce((total, item) => total + Number(item), 0);
 
-  const totalExpense = getStoredItems.filter(item => item.id === 'expense').map(item => item.amount).reduce((total, item) => total + Number(item), 0);
+    const totalExpense = getStoredItems.filter(item => item.id === 'expense').map(item => item.amount).reduce((total, item) => total + Number(item), 0);
 
-  const balance = totalIncome - totalExpense
-  return balance;
+    const balance = totalIncome - totalExpense
+    return balance.toLocaleString();
+  }
 }
 
+// reset the the local storage
+form.addEventListener('reset', resetLocalStorage);
 
+function resetLocalStorage() {
+  localStorage.clear();
+  incomeItems.innerHTML = '';
+  expenseItems.innerHTML = '';
+  ownerBalance.style.color = 'red'
+  ownerBalance.textContent = '0 €';
+}

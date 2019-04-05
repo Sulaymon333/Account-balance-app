@@ -2,6 +2,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  outline: none;
   font-family: 'Gloria Hallelujah', cursive;
 }
 body{
@@ -82,6 +83,9 @@ ul li {
   border-bottom: 1px solid #333;
   display: flex;
   justify-content: flex-end;
+}
+ul li:nth-child(odd){
+  background: rgb(224, 221, 221);
 }
 
 span{
